@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snapshare"
+version = "0.1.0"
+description = "A ShareX-style screenshot, annotation and sharing tool for KDE Plasma on Wayland"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
+dependencies = [
+    "PyQt6>=6.6",
+    "requests>=2.31",
+]
+
+[project.scripts]
+snapshare = "snapshare.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["snapshare*"]

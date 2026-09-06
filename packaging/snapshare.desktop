@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Snapshare
+Comment=Screenshot capture, annotation and sharing (ShareX-style) for KDE Plasma
+Exec=snapshare tray
+Icon=camera-photo
+Terminal=false
+Categories=Graphics;Utility;
+X-KDE-autostart-phase=1
