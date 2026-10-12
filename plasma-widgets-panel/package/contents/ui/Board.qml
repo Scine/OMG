@@ -3,17 +3,21 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.plasma.plasmoid
 import org.kde.plasma.components as PlasmaComponents
-import org.kde.plasma.extras as PlasmaExtras
 import org.kde.kirigami as Kirigami
 
 Item {
     id: board
     property var applet
 
+    // Roomy, Windows 11-style board. Grows to two columns when wide.
     Layout.minimumWidth: Kirigami.Units.gridUnit * 24
     Layout.minimumHeight: Kirigami.Units.gridUnit * 28
-    Layout.preferredWidth: Kirigami.Units.gridUnit * 26
-    Layout.preferredHeight: Kirigami.Units.gridUnit * 36
+    Layout.preferredWidth: Kirigami.Units.gridUnit * 46
+    Layout.preferredHeight: Kirigami.Units.gridUnit * 42
+    Layout.maximumWidth: Kirigami.Units.gridUnit * 60
+    Layout.maximumHeight: Kirigami.Units.gridUnit * 60
+
+    readonly property bool twoColumns: width > Kirigami.Units.gridUnit * 40
 
     ColumnLayout {
         anchors.fill: parent
@@ -55,13 +59,30 @@ Item {
             Layout.fillHeight: true
             contentWidth: availableWidth
 
-            ColumnLayout {
+            GridLayout {
                 width: board.width - Kirigami.Units.smallSpacing * 2
-                spacing: Kirigami.Units.largeSpacing
+                columns: board.twoColumns ? 2 : 1
+                columnSpacing: Kirigami.Units.largeSpacing
+                rowSpacing: Kirigami.Units.largeSpacing
 
-                WeatherCard { applet: board.applet }
-                StocksCard { applet: board.applet }
-                NewsCard { applet: board.applet }
+                // Weather takes the left column (spans both rows when two-column).
+                WeatherCard {
+                    applet: board.applet
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignTop
+                    Layout.rowSpan: board.twoColumns ? 2 : 1
+                    Layout.preferredWidth: board.twoColumns ? board.width * 0.5 : board.width
+                }
+                StocksCard {
+                    applet: board.applet
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignTop
+                }
+                NewsCard {
+                    applet: board.applet
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignTop
+                }
             }
         }
     }
