@@ -5,13 +5,14 @@ import org.kde.kirigami as Kirigami
 
 Card {
     id: newsCard
+    property var applet
     title: i18n("News")
     iconName: "news-subscribe"
-    loading: root.newsLoading
-    errorText: root.newsError
+    loading: applet.newsLoading
+    errorText: applet.newsError
 
     Repeater {
-        model: root.newsData
+        model: applet.newsData
         delegate: RowLayout {
             Layout.fillWidth: true
             spacing: Kirigami.Units.smallSpacing
@@ -57,7 +58,7 @@ Card {
     }
 
     PlasmaComponents.Label {
-        visible: root.newsData.length === 0 && !root.newsLoading && root.newsError.length === 0
+        visible: applet.newsData.length === 0 && !applet.newsLoading && applet.newsError.length === 0
         text: i18n("No headlines.")
         opacity: 0.6
     }

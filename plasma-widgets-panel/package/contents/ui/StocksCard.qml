@@ -5,13 +5,14 @@ import org.kde.kirigami as Kirigami
 
 Card {
     id: stocksCard
+    property var applet
     title: i18n("Markets")
     iconName: "office-chart-line"
-    loading: root.stocksLoading
-    errorText: root.stocksError
+    loading: applet.stocksLoading
+    errorText: applet.stocksError
 
     Repeater {
-        model: root.stocksData
+        model: applet.stocksData
         delegate: RowLayout {
             Layout.fillWidth: true
             spacing: Kirigami.Units.smallSpacing
@@ -49,7 +50,7 @@ Card {
     }
 
     PlasmaComponents.Label {
-        visible: root.stocksData.length === 0 && !root.stocksLoading && root.stocksError.length === 0
+        visible: applet.stocksData.length === 0 && !applet.stocksLoading && applet.stocksError.length === 0
         text: i18n("No symbols configured.")
         opacity: 0.6
     }
@@ -57,7 +58,7 @@ Card {
     PlasmaComponents.Label {
         Layout.fillWidth: true
         Layout.topMargin: Kirigami.Units.smallSpacing
-        visible: root.stocksData.length > 0
+        visible: applet.stocksData.length > 0
         font: Kirigami.Theme.smallFont
         opacity: 0.5
         wrapMode: Text.WordWrap

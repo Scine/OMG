@@ -14,6 +14,9 @@
         <entry name="longitude" type="Double">
             <default>-74.0060</default>
         </entry>
+        <entry name="savedLocations" type="String">
+            <default>New York	40.7128	-74.006</default>
+        </entry>
         <entry name="temperatureUnit" type="String">
             <default>fahrenheit</default>
         </entry>

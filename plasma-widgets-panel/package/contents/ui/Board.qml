@@ -8,10 +8,12 @@ import org.kde.kirigami as Kirigami
 
 Item {
     id: board
+    property var applet
+
     Layout.minimumWidth: Kirigami.Units.gridUnit * 24
     Layout.minimumHeight: Kirigami.Units.gridUnit * 28
     Layout.preferredWidth: Kirigami.Units.gridUnit * 26
-    Layout.preferredHeight: Kirigami.Units.gridUnit * 34
+    Layout.preferredHeight: Kirigami.Units.gridUnit * 36
 
     ColumnLayout {
         anchors.fill: parent
@@ -29,16 +31,16 @@ Item {
             PlasmaComponents.Label {
                 opacity: 0.6
                 font: Kirigami.Theme.smallFont
-                text: root.lastUpdated.getTime() > 0
-                    ? i18n("Updated %1", Qt.formatTime(root.lastUpdated, Qt.locale().timeFormat(Locale.ShortFormat)))
+                text: (board.applet && board.applet.lastUpdated.getTime() > 0)
+                    ? i18n("Updated %1", Qt.formatTime(board.applet.lastUpdated, Qt.locale().timeFormat(Locale.ShortFormat)))
                     : ""
             }
             PlasmaComponents.ToolButton {
                 icon.name: "view-refresh"
                 display: QQC2.AbstractButton.IconOnly
                 text: i18n("Refresh")
-                onClicked: root.refreshAll()
-                enabled: !(root.weatherLoading || root.stocksLoading || root.newsLoading)
+                onClicked: board.applet.refreshAll()
+                enabled: board.applet && !(board.applet.weatherLoading || board.applet.stocksLoading || board.applet.newsLoading)
             }
             PlasmaComponents.ToolButton {
                 icon.name: "configure"
@@ -57,9 +59,9 @@ Item {
                 width: board.width - Kirigami.Units.smallSpacing * 2
                 spacing: Kirigami.Units.largeSpacing
 
-                WeatherCard {}
-                StocksCard {}
-                NewsCard {}
+                WeatherCard { applet: board.applet }
+                StocksCard { applet: board.applet }
+                NewsCard { applet: board.applet }
             }
         }
     }

@@ -1,62 +1,94 @@
 # Widgets Board — a Windows 11-style widgets panel for KDE Plasma 6
 
 A panel applet (plasmoid) that sits in your taskbar. Click its icon and a board
-slides open with **weather**, **stocks/markets**, and **news** — the same idea as
-the Windows 11 "Widgets" button in the corner of the taskbar.
+opens with a **rich weather** view, your **stock watchlist**, and the latest
+**news** — the same idea as the Windows 11 "Widgets" button, built for KDE.
 
-![layout](docs/preview.txt)
+Everything is configured through a **graphical settings page** — search for
+cities, add/remove stocks with buttons, pick a news source from a list. There
+are no config files to edit. It's meant to be installed and used by anyone.
 
 ## What it shows
 
-- **Weather** — current conditions plus a 5-day forecast, for any city.
-- **Markets** — a watchlist of stock symbols with price and daily change.
-- **News** — the latest headlines from any RSS/Atom feed; click one to open it.
+**Weather** (the centerpiece), with three tabs:
+- **Details** — large current temperature with a weather glyph and High/Low, then
+  a grid of conditions: humidity, pressure, wind (with a direction arrow), dew
+  point, visibility, precipitation, UV index, air quality, pollen, space weather
+  (Kp index), snowfall and local time — plus a **sunrise/sunset arc** and a
+  **moon-phase** panel, and any active weather alerts.
+- **Forecast** — a 7-day outlook with highs, lows and precipitation.
+- **Radar** — a 7-day precipitation outlook and a button to open a live radar map.
 
-Everything refreshes on a timer (configurable) and when you open the board.
+**Markets** — your watchlist with price and daily change (green/red).
 
-## Data sources (no API keys required)
+**News** — headlines from a source you choose; click one to open it.
 
-| Widget  | Source       | Notes                                              |
-|---------|--------------|----------------------------------------------------|
-| Weather | [Open-Meteo](https://open-meteo.com/) | Free, no key. Also used for city search. |
-| Stocks  | [Stooq](https://stooq.com/)           | Free CSV quotes. May be delayed; change is vs. today's open. |
-| News    | Any RSS/Atom feed | Defaults to Google News top stories.           |
+Multiple saved weather locations are supported — switch between them with the
+arrows in the weather header.
 
-Because it uses only keyless public endpoints, it works out of the box. You can
-point the news feed at anything you like.
+## Data sources (no API keys, nothing to sign up for)
+
+| Data            | Source                                                   |
+|-----------------|----------------------------------------------------------|
+| Weather, air quality, city search | [Open-Meteo](https://open-meteo.com/) |
+| Weather alerts (US) | [NOAA / National Weather Service](https://www.weather.gov/) |
+| Space weather (Kp)  | [NOAA SWPC](https://www.swpc.noaa.gov/)              |
+| Stocks          | [Stooq](https://stooq.com/) CSV quotes                   |
+| News            | Any RSS/Atom feed                                        |
+
+It works out of the box because every source is a free, keyless public endpoint.
 
 ## Requirements
 
-- KDE Plasma **6** (Plasma 5 is not supported — the QML uses Plasma 6 imports).
-- Network access from your session.
+- KDE Plasma **6**
+- Network access from your session
 
-## Install
+## Install — the easy way
+
+**Option A — double-click.** Build the package once and open it:
+
+```bash
+./build-plasmoid.sh      # creates WidgetsBoard.plasmoid
+```
+
+Double-click `WidgetsBoard.plasmoid` in your file manager → KDE offers to
+install it. Or run `kpackagetool6 --type Plasma/Applet --install WidgetsBoard.plasmoid`.
+
+**Option B — install script.** From this folder:
 
 ```bash
 ./install.sh
 ```
 
-Then right-click your panel → **Add or Manage Widgets…**, search for
-**Widgets Board**, and drag it onto the panel. For the Windows 11 feel, drop it
-in the far corner of the panel.
+Then add it to your panel: right-click the panel → **Add or Manage Widgets…** →
+search **Widgets Board** → drag it on. For the Windows 11 look, drop it in the
+far corner.
 
-To preview without installing (if `plasmoidviewer` is available):
+**Option C — preview without installing** (if `plasmoidviewer` is available):
 
 ```bash
 plasmoidviewer -a ./package
 ```
 
-## Configure
+### Sharing it with others / the KDE Store
+
+To let anyone install it straight from KDE's **Add Widgets → Get New Widgets…**
+browser, upload `WidgetsBoard.plasmoid` to [store.kde.org](https://store.kde.org/)
+as a "Plasma 6 Add-On → Plasma Widget". After that, no terminal is needed at all —
+users find it by name in the widget browser and click Install.
+
+## Settings (all graphical)
 
 Right-click the widget → **Configure Widgets Board…**:
 
-- **Location** — type a city, hit *Search*, pick a result; it fills in the
-  coordinates for you. Or enter latitude/longitude by hand.
+- **Weather locations** — type a city, click Search, pick a result, click Add.
+  Reorder with the up/down buttons, set the default with the radio button,
+  remove with the trash button.
 - **Units** — Fahrenheit/Celsius and mph/km-h.
-- **Markets** — comma-separated symbols. US tickers like `AAPL` work as-is; use
-  `^SPX`, `^DJI` for indices, or an exchange suffix such as `VOD.UK`.
-- **News** — any RSS or Atom feed URL.
-- **Updates** — how often to refresh (5–240 minutes).
+- **Stock watchlist** — type a symbol, click Add; remove with the ✕ on each chip.
+- **News feed** — choose a source from the dropdown, or pick Custom and paste any
+  feed URL.
+- **Updates** — refresh interval (5–240 minutes).
 
 ## Uninstall
 
@@ -70,25 +102,32 @@ kpackagetool6 --type Plasma/Applet --remove org.kde.widgetsboard
 package/
   metadata.json                 applet manifest
   contents/
-    config/
-      main.xml                  settings schema + defaults
-      config.qml                settings categories
+    config/  main.xml, config.qml      settings schema + categories
     ui/
-      main.qml                  root: panel icon + board, data fetching
-      Board.qml                 the pop-open board layout
-      Card.qml                  reusable rounded card frame
-      WeatherCard.qml           current conditions + 5-day forecast
-      StocksCard.qml            watchlist
-      NewsCard.qml              headlines
-      configGeneral.qml         settings page (with city search)
+      main.qml                  root: panel icon, board, data fetching, locations
+      Board.qml                 the pop-open board
+      WeatherCard.qml           tabbed weather (Details/Forecast/Radar)
+      WeatherGlyph.qml          canvas-drawn sun/moon/cloud graphic
+      SunArc.qml                sunrise/sunset arc panel
+      MoonPanel.qml             moon-phase panel
+      DetailTile.qml            one metric row
+      SegmentedControl.qml      the tab switcher
+      StocksCard.qml / NewsCard.qml / Card.qml
+      configGeneral.qml         graphical settings page
     code/
-      fetch.js                  HTTP + Open-Meteo / Stooq / RSS parsing
+      fetch.js                  HTTP + all data parsing (weather, air, alerts,
+                                space weather, stocks, RSS, geocoding, locations)
+build-plasmoid.sh               builds the installable .plasmoid
 install.sh                      install/upgrade helper
 ```
 
 ## Notes & limitations
 
-- Stock "change" is computed against the day's opening price from Stooq's quote
-  CSV, which can lag real time. For anything you trade on, use a brokerage app.
-- The RSS parser is deliberately lightweight (regex-based) so it has no
-  dependencies; extremely unusual feeds may render a little rough.
+- Weather **alerts** and some metrics (US AQI, pollen coverage) are strongest in
+  the United States; elsewhere those tiles may read `--` when a source has no data.
+- Stock "change" is computed against the day's opening price from Stooq and can be
+  delayed — fine for glancing, not for trading.
+- The moon panel shows the astronomically-correct phase and illumination; it's a
+  visual summary, not a precise moonrise/moonset timetable.
+- The RSS parser is intentionally dependency-free (regex-based); very unusual
+  feeds may render a little rough.
