@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "tbeehler@gmail.com",
+                "Name": "T. Beehler"
+            }
+        ],
+        "Category": "News",
+        "Description": "A Windows 11-style widgets panel with news, stocks, and weather. Click the icon in the corner of your panel to open the board.",
+        "Icon": "view-calendar-day",
+        "Id": "org.kde.widgetsboard",
+        "License": "MIT",
+        "Name": "Widgets Board",
+        "Version": "1.0"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

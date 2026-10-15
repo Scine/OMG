@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name=""/>
+    <group name="General">
+        <entry name="locationName" type="String">
+            <default>New York</default>
+        </entry>
+        <entry name="latitude" type="Double">
+            <default>40.7128</default>
+        </entry>
+        <entry name="longitude" type="Double">
+            <default>-74.0060</default>
+        </entry>
+        <entry name="savedLocations" type="String">
+            <default>New York	40.7128	-74.006</default>
+        </entry>
+        <entry name="temperatureUnit" type="String">
+            <default>fahrenheit</default>
+        </entry>
+        <entry name="windSpeedUnit" type="String">
+            <default>mph</default>
+        </entry>
+        <entry name="stockSymbols" type="String">
+            <default>AAPL,MSFT,GOOGL,AMZN,NVDA</default>
+        </entry>
+        <entry name="newsFeedUrl" type="String">
+            <default>https://news.google.com/rss?hl=en-US&amp;gl=US&amp;ceid=US:en</default>
+        </entry>
+        <entry name="refreshIntervalMinutes" type="Int">
+            <default>15</default>
+        </entry>
+    </group>
+</kcfg>
